@@ -1,0 +1,13 @@
+sky:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    host: localhost
+    port: 3306
+    database: spring_employee_records
+    username: root
+    password: 011688
+  alioss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    accessKeyId:
+    accessKeySecret:
+    bucketName: web-supercyan
