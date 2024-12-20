@@ -14,10 +14,10 @@ spring:
       max-request-size: 100MB
   datasource:
     druid:
-      driver-class-name: ${sky.datasource.driver-class-name}
-      url: jdbc:mysql://${sky.datasource.host}:${sky.datasource.port}/${sky.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
-      username: ${sky.datasource.username}
-      password: ${sky.datasource.password}
+      driver-class-name: ${records.datasource.driver-class-name}
+      url: jdbc:mysql://${records.datasource.host}:${records.datasource.port}/${records.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${records.datasource.username}
+      password: ${records.datasource.password}
 
 mybatis:
   #mapper配置文件
@@ -32,7 +32,7 @@ pagehelper:
 logging:
   level:
     com:
-      sky:
+      records:
         mapper: debug
         service: info
         controller: info
@@ -46,7 +46,7 @@ records:
     # 设置前端传递过来的令牌名称
     admin-token-name: token
   alioss:
-    endpoint: ${sky.alioss.endpoint}
-    access-key-id: ${sky.alioss.access-key-id}
-    access-key-secret: ${sky.alioss.access-key-secret}
-    bucket-name: ${sky.alioss.bucket-name}
+    endpoint: ${records.alioss.endpoint}
+    access-key-id: ${records.alioss.access-key-id}
+    access-key-secret: ${records.alioss.access-key-secret}
+    bucket-name: ${records.alioss.bucket-name}

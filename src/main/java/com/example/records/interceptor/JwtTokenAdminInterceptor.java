@@ -51,10 +51,11 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         try {
             log.info("jwt校验:{}", token);
             Claims claims = JwtUtils.parseJWT(jwtProperties.getAdminSecretKey(), token);
-            Long adminId = Long.valueOf(claims.get(JwtClaimsConstant.ADMIN_ID).toString());
-            log.info("当前管理员id{}",adminId );
+            log.info("当前用户id为{}",claims.get(JwtClaimsConstant.USER_ID));
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
+            log.info("当前管理员id{}",userId);
             //将empId员工当前进行操作的员工Id存储在ThreadLocal存储空间中
-            BaseContext.setCurrentId(adminId);
+            BaseContext.setCurrentId(userId);
             //3、通过，放行
             return true;
         } catch (Exception ex) {

@@ -1,8 +1,12 @@
 package com.example.records.result;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 //RESTful风格统一返回对象Result
+//必须实现Serializable接口，否则无法序列化。且需要添加@Data注解保证getter和setter
+@Data
 public class Result<T> implements Serializable {
     private Integer code;
     private String msg;
@@ -23,7 +27,7 @@ public class Result<T> implements Serializable {
     }
 
 
-    public static <T> Result<T> erro(String message){
+    public static <T> Result<T> error(String message){
         Result<T> result = new Result<T>();
         result.code = 0;
         result.msg = message;

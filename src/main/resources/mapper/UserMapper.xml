@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.records.mapper.UserMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into user(username,password,status,avatar,employee_name,department,invite_code_id,entry_date,create_time,update_time)
+        values(#{username},#{password},#{status},#{avatar},#{employeeName},#{department},#{inviteCodeId},#{entryDate},#{createTime},#{updateTime})
+    </insert>
+    <update id="update">
+        update user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+            <if test="employeeName!= null and employeeName != ''">
+                employee_name = #{employeeName},
+            </if>
+            <if test="department != null and department != ''">
+                department = #{department},
+            </if>
+            <if test="entryDate != null">
+                entry_date = #{entryDate},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+    </update>
+
+    <select id="searchUser" resultType="com.example.records.pojo.entity.User">
+        select * from user
+        <where>
+        <if test="employeeName != null and employeeName != ''">
+            and employee_name like concat('%',#{employeeName},'%')
+        </if>
+        <if test="department != null and department != ''">
+            and department like concat('%',#{department},'%')
+        </if>
+        <if test="beginDateScope != null and endDateScope != null">
+            and entry_date between #{beginDateScope} and #{endDateScope}
+        </if>
+        </where>
+        order by id desc
+    </select>
+</mapper>

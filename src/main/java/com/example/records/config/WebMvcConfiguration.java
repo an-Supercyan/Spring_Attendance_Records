@@ -40,8 +40,9 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         log.info("开始注册自定义拦截器...");
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/employee/login");
-
+                .excludePathPatterns("/login")
+                .excludePathPatterns("/register")
+                .excludePathPatterns("/admin/users/page");
     }
 
     /**
@@ -59,7 +60,49 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .groupName("管理端相关接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.item.integratesecond.integrate.controller.admin"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.records.controller.admin"))
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
+
+    /**
+     * 通过knife4j生成接口文档
+     * @return
+     */
+    @Bean
+    public Docket Userdocket() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("员工考勤信息管理平台接口")
+                .version("2.0")
+                .description("员工考勤信息管理平台接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端相关接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.example.records.controller.users"))
+                .paths(PathSelectors.any())
+                .build();
+        return docket;
+    }
+
+    /**
+     * 通过knife4j生成接口文档
+     * @return
+     */
+    @Bean
+    public Docket Accessdocket() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("员工考勤信息管理平台接口")
+                .version("2.0")
+                .description("员工考勤信息管理平台接口文档")
+                .build();
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("登陆注册相关接口")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.example.records.controller.access"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;

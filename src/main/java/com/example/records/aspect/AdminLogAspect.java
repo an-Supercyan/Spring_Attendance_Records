@@ -37,7 +37,7 @@ public class AdminLogAspect {
     public Object recordLog(ProceedingJoinPoint joinPoint) throws Throwable {
         String jwt = request.getHeader("Token");//在Request请求对象的请求头中获取jwt令牌
         Claims claims = JwtUtils.parseJWT(jwtProperties.getAdminSecretKey(),jwt);//通过解析jwt令牌获取claims对象
-        Integer operateUser = (Integer) claims.get("id");//通过claims对象获取jwt令牌中携带的登录员工信息
+        Integer operateUser = (Integer) claims.get("userId");//通过claims对象获取jwt令牌中携带的登录员工信息
 
         LocalDateTime operateTime = LocalDateTime.now();
         //获取操作时间
