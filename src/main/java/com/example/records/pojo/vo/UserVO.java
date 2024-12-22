@@ -6,6 +6,10 @@ import java.io.Serializable;
 
 @Data
 public class UserVO implements Serializable {
-    private Long userId;
-    private Long id;
+    private String username;
+    private String employeeName;
+    private Integer gender;
+    private String avatar;
+    private Integer role;
+    private String department;
 }

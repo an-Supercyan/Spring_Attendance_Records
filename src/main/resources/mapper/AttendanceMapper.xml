@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.records.mapper.AttendanceMapper">
+    <select id="pageAttendance" resultType="com.example.records.pojo.entity.Attendance">
+
+        select id, user_id, employee_name, department, required_hours, check_in_time, total_work_hours, overtime_hours,
+        absences_count, entry_date, no_check_in_reason from attendance
+        <where>
+            <if test="employeeName != null and employeeName != ''">
+                and employee_name like concat('%',#{employeeName},'%')
+            </if>
+            <if test="department != null and department != ''">
+                and department like concat('%',#{department},'%')
+            </if>
+            <if test="checkInTime != null">
+                and check_in_time &gt;= #{checkInTime}
+            </if>
+        </where>
+    </select>
+</mapper>

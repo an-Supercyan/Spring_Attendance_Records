@@ -1,5 +1,6 @@
 package com.example.records.service.impl;
 
+import com.example.records.context.BaseContext;
 import com.example.records.mapper.AuthorityMapper;
 import com.example.records.mapper.UserMapper;
 import com.example.records.pojo.dto.UserLoginDTO;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccessServiceImpl implements AccessService {
@@ -41,12 +43,14 @@ public class AccessServiceImpl implements AccessService {
         if (user.getStatus() == 0) {
             throw new RuntimeException("用户已被禁用");
         }
+        //若登陆成功则记录当前用户的currentID，用于后续的用户个人信息更新操作(通过拦截器实现)
         UserLoginVO userLoginVO = new UserLoginVO();
         BeanUtils.copyProperties(user, userLoginVO);
         return userLoginVO;
     }
 
     @Override
+    @Transactional
     public void register(UserRegisterDTO userRegisterDTO) {
         String inviteCode = userRegisterDTO.getInviteCode();
         String username = userRegisterDTO.getUsername();
@@ -65,13 +69,14 @@ public class AccessServiceImpl implements AccessService {
         BeanUtils.copyProperties(userRegisterDTO, registerUser);
         registerUser.setInviteCodeId(authority.getId());
         registerUser.setPassword(DigestUtils.md5Hex(registerUser.getPassword()));
-        //根据获取到的权限信息设置用户表冗余字段身份
+        //根据获取到的权限信息设置用户表冗余字段
         if (authority.getIdentity() == 1){
-            registerUser.setStatus(1);
+            registerUser.setRole(1);
         }else {
-            registerUser.setStatus(0);
+            registerUser.setRole(0);
         }
-
+        //设置用户状态默认启用
+        registerUser.setStatus(1);
         userMapper.insert(registerUser);
         Long userId = registerUser.getId();
         log.info("用户注册成功，用户id为：{}", userId);

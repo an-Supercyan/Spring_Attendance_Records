@@ -1,6 +1,7 @@
 package com.example.records.controller.users;
 
 import com.example.records.pojo.dto.UserDTO;
+import com.example.records.pojo.vo.UserVO;
 import com.example.records.result.Result;
 import com.example.records.service.UserService;
 import com.example.records.utils.AliOssUtil;
@@ -31,9 +32,17 @@ public class UserInfoController {
 
     @GetMapping("/logout")
     @ApiOperation("用户注销登陆")
-    public Result getUserInfo() {
+    public Result logout() {
         log.info("用户注销");
         return Result.success();
+    }
+
+    @GetMapping("/info")
+    @ApiOperation("获取当前用户登陆信息")
+    public Result<UserVO> getUserInfo(UserDTO userDTO) {
+        log.info("获取当前用户Id:{}", userDTO.getId());
+        UserVO userVO = userService.getUserInfoById(userDTO);
+        return Result.success(userVO);
     }
 
     /**
@@ -55,9 +64,10 @@ public class UserInfoController {
             String fileName = UUID.randomUUID().toString() + suffixName;
             //将文件传递到aliyunOSS中 并获取文件在OSS中的Path路径
             String filePath = aliOssUtil.upload(file.getBytes(), fileName);
+            //更新对应用户的信息(目前只更新用户头像信息)
             UserDTO userDTO = new UserDTO();
             userDTO.setAvatar(filePath);
-            userService.update(userDTO);
+            userService.updateAvatar(userDTO);
             return Result.success(filePath);
         } catch (IOException e) {
             log.error("上传文件失败{}", e);

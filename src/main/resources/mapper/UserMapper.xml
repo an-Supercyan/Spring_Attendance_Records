@@ -18,6 +18,12 @@
             <if test="status != null">
                 status = #{status},
             </if>
+            <if test="role != null">
+                role = #{role},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
             <if test="avatar != null and avatar != ''">
                 avatar = #{avatar},
             </if>
@@ -34,20 +40,24 @@
                 update_time = #{updateTime},
             </if>
         </set>
+        where id = #{id}
     </update>
 
     <select id="searchUser" resultType="com.example.records.pojo.entity.User">
-        select * from user
+        select id, username,status, role, gender, avatar, employee_name, department, entry_date from user
         <where>
-        <if test="employeeName != null and employeeName != ''">
-            and employee_name like concat('%',#{employeeName},'%')
-        </if>
-        <if test="department != null and department != ''">
-            and department like concat('%',#{department},'%')
-        </if>
-        <if test="beginDateScope != null and endDateScope != null">
-            and entry_date between #{beginDateScope} and #{endDateScope}
-        </if>
+            <if test="employeeName != null and employeeName != ''">
+                and employee_name like concat('%',#{employeeName},'%')
+            </if>
+            <if test="department != null and department != ''">
+                and department like concat('%',#{department},'%')
+            </if>
+            <if test="entryDateBegin != null">
+                and entry_date &gt;= #{entryDateBegin}
+            </if>
+            <if test="entryDateEnd != null">
+                and entry_date &lt;= #{entryDateEnd}
+            </if>
         </where>
         order by id desc
     </select>

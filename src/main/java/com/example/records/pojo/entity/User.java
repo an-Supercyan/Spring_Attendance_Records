@@ -16,6 +16,8 @@ public class User {
     private String username;
     private String password;
     private Integer status;
+    private Integer role;
+    private Integer gender;
     private String avatar;
     private String employeeName;
     private String department ;
