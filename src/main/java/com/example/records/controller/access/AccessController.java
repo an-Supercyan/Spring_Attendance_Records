@@ -38,6 +38,7 @@ public class AccessController {
         //生成jwt令牌
         HashMap<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.USER_ID, userLoginVO.getId());
+        claims.put(JwtClaimsConstant.EMPLOYEE_NAME, userLoginVO.getEmployeeName());
         String token = JwtUtils
                 .createJWT(jwtProperties.getAdminSecretKey(), jwtProperties.getAdminTtl(), claims);
         userLoginVO.setToken(token);

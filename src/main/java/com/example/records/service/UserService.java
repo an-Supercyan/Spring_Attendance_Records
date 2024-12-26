@@ -2,6 +2,7 @@ package com.example.records.service;
 
 
 import com.example.records.pojo.dto.UserDTO;
+import com.example.records.pojo.dto.UserLoginDTO;
 import com.example.records.pojo.dto.UserPageQueryDTO;
 
 import com.example.records.pojo.vo.UserVO;
@@ -55,5 +56,17 @@ public interface UserService {
      * @param id
      */
     void deleteUser(Long id);
+
+    /**
+     * 检查用户旧密码
+     * @param userLoginDTO
+     */
+    void checkOldPassword(UserLoginDTO userLoginDTO);
+
+    /**
+     * 修改用户密码
+     * @param userLoginDTO
+     */
+    void changePassword(UserLoginDTO userLoginDTO);
 }
 

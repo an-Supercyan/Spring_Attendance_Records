@@ -1,5 +1,6 @@
 package com.example.records.controller.admin;
 
+import com.example.records.annotation.AdminLog;
 import com.example.records.pojo.dto.UserDTO;
 import com.example.records.pojo.dto.UserPageQueryDTO;
 import com.example.records.result.PageResult;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("admin/users")
 @Api(tags = "用户管理接口")
 @Slf4j
-public class UserController {
+public class UserManageController {
     @Autowired
     UserService userService;
 
@@ -36,6 +37,7 @@ public class UserController {
         return Result.success(pageResult);
     }
 
+    @AdminLog
     @ApiOperation("更改用户账户状态")
     @PostMapping("/status/{id}")
     public Result<String> updateUserStatus(@PathVariable Long id){
@@ -44,6 +46,7 @@ public class UserController {
         return Result.success();
     }
 
+    @AdminLog
     @ApiOperation("更新用户信息")
     @PutMapping("/update")
     public Result<String> updateUser(@RequestBody UserDTO userDTO){
@@ -52,6 +55,7 @@ public class UserController {
         return Result.success();
     }
 
+    @AdminLog
     @ApiOperation("删除用户信息")
     @DeleteMapping("/{id}")
     public Result<String> deleteUser(@PathVariable Long id){

@@ -41,8 +41,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/login")
-                .excludePathPatterns("/register")
-                .excludePathPatterns("/admin/users/page");
+                .excludePathPatterns("/register");
     }
 
     /**
@@ -78,10 +77,10 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .description("员工考勤信息管理平台接口文档")
                 .build();
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .groupName("用户端相关接口")
+                .groupName("员工端相关接口")
                 .apiInfo(apiInfo)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.records.controller.users"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.records.controller.employee"))
                 .paths(PathSelectors.any())
                 .build();
         return docket;

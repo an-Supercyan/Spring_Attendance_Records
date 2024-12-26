@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 public class OssConfiguration {
-
     @Bean
     @ConditionalOnMissingBean//保证Spring IOC容器内只有一个该文件上传工具类对象即可
     public AliOssUtil aliOssUtil(AliOssProperties aliOssProperties) {

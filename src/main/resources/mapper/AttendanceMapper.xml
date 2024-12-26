@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.records.mapper.AttendanceMapper">
+    <update id="updateAttendance">
+        update attendance
+        <set>
+            <if test="department != null and department != ''">
+                department = #{department},
+            </if>
+            <if test="requiredHours != null">
+                required_hours = #{requiredHours},
+            </if>
+            <if test="checkInTime != null">
+                check_in_time = #{checkInTime},
+            </if>
+            <if test="totalWorkHours != null">
+                total_work_hours = #{totalWorkHours},
+            </if>
+            <if test="overtimeHours != null">
+                overtime_hours = #{overtimeHours}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
     <select id="pageAttendance" resultType="com.example.records.pojo.entity.Attendance">
 
         select id, user_id, employee_name, department, required_hours, check_in_time, total_work_hours, overtime_hours,
@@ -14,7 +35,7 @@
                 and department like concat('%',#{department},'%')
             </if>
             <if test="checkInTime != null">
-                and check_in_time &gt;= #{checkInTime}
+                and check_in_time &gt;= #{checkInTime} or check_in_time is null
             </if>
         </where>
     </select>

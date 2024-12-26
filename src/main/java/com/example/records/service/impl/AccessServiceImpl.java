@@ -1,6 +1,8 @@
 package com.example.records.service.impl;
 
+import com.example.records.constant.MessageConstant;
 import com.example.records.context.BaseContext;
+import com.example.records.exception.*;
 import com.example.records.mapper.AuthorityMapper;
 import com.example.records.mapper.UserMapper;
 import com.example.records.pojo.dto.UserLoginDTO;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class AccessServiceImpl implements AccessService {
+public class AccessServiceImpl implements AccessService{
     private static final Logger log = LoggerFactory.getLogger(AccessServiceImpl.class);
     @Autowired
     UserMapper userMapper;
@@ -33,15 +35,16 @@ public class AccessServiceImpl implements AccessService {
 
         User user = userMapper.getUserByUsername(username);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            //与javax包中的异常类冲突
+            throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
         }
 
         if (!user.getPassword().equals(DigestUtils.md5Hex(password))) {
-            throw new RuntimeException("密码错误");
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
         if (user.getStatus() == 0) {
-            throw new RuntimeException("用户已被禁用");
+            throw new AccountLockException(MessageConstant.ACCOUNT_LOCK);
         }
         //若登陆成功则记录当前用户的currentID，用于后续的用户个人信息更新操作(通过拦截器实现)
         UserLoginVO userLoginVO = new UserLoginVO();
@@ -57,11 +60,11 @@ public class AccessServiceImpl implements AccessService {
         Authority authority = authorityMapper.getAuthorityByInviteCode(inviteCode);
         User user = userMapper.getUserByUsername(username);
         if (authority == null) {
-            throw new RuntimeException("用户邀请码错误");
+            throw new InviteErrorException(MessageConstant.INVITE_CODE_ERROR);
         }
 
         if (user != null) {
-            throw new RuntimeException("用户已存在");
+            throw new AccountExistException(MessageConstant.ACCOUNT_EXIST);
         }
 
         //新增用户到数据库

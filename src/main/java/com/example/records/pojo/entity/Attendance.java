@@ -14,11 +14,11 @@ public class Attendance {
     private Long userId;
     private String employeeName;
     private String department;
-    private String requiredHours;
-    private String checkInTime;
-    private String totalWorkHours;
-    private String overtimeHours;
-    private String absencesCount;
+    private Integer requiredHours;
+    private LocalDateTime checkInTime;
+    private Integer totalWorkHours;
+    private Integer overtimeHours;
+    private Integer absencesCount;
     private LocalDateTime entryDate;
     private String noCheckInReason;
 }

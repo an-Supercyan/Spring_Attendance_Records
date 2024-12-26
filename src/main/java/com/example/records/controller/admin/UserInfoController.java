@@ -1,6 +1,9 @@
-package com.example.records.controller.users;
+package com.example.records.controller.admin;
 
+import com.example.records.annotation.AdminLog;
 import com.example.records.pojo.dto.UserDTO;
+import com.example.records.pojo.dto.UserLoginDTO;
+import com.example.records.pojo.vo.UserLoginVO;
 import com.example.records.pojo.vo.UserVO;
 import com.example.records.result.Result;
 import com.example.records.service.UserService;
@@ -10,11 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -37,6 +37,9 @@ public class UserInfoController {
         return Result.success();
     }
 
+    // TODO 修改当前用户登陆密码
+
+
     @GetMapping("/info")
     @ApiOperation("获取当前用户登陆信息")
     public Result<UserVO> getUserInfo(UserDTO userDTO) {
@@ -51,8 +54,9 @@ public class UserInfoController {
      * @param file
      * @return
      */
+    @AdminLog
     @PostMapping("/upload")
-    @ApiOperation("上传菜品图片")
+    @ApiOperation("上传用户头像")
     public Result<String> upload(MultipartFile file) {
         log.info("获取到文件对象{}", file);
         try {
@@ -73,5 +77,21 @@ public class UserInfoController {
             log.error("上传文件失败{}", e);
         }
         return Result.error("图片上传失败");
+    }
+
+    @ApiOperation("检验用户旧密码")
+    @PostMapping("/checkOldPassword")
+    public Result<String> checkPassword(@RequestBody UserLoginDTO userLoginDTO) {
+        log.info("获取用户旧密码信息:{}",userLoginDTO);
+        userService.checkOldPassword(userLoginDTO);
+        return Result.success();
+    }
+
+    @ApiOperation("用户重置密码")
+    @PostMapping("/changePassword")
+    public Result<String> updateUserInfo(@RequestBody UserLoginDTO userLoginDTO) {
+        log.info("获取更改的用户信息:{}",userLoginDTO);
+        userService.changePassword(userLoginDTO);
+        return Result.success();
     }
 }

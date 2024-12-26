@@ -30,8 +30,6 @@ class UserTest {
         UserPageQueryDTO userPageQueryDTO = new UserPageQueryDTO();
         userPageQueryDTO.setPage(1);
         userPageQueryDTO.setPageSize(10);
-        userPageQueryDTO.setBeginDateScope(LocalDateTime.now().minusDays(7));
-        userPageQueryDTO.setEndDateScope(LocalDateTime.now());
         PageResult pageResult = userService.pageUser(userPageQueryDTO);
         log.info("pageResult{}",pageResult);
     }

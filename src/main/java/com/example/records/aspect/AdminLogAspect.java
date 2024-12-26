@@ -38,6 +38,7 @@ public class AdminLogAspect {
         String jwt = request.getHeader("Token");//在Request请求对象的请求头中获取jwt令牌
         Claims claims = JwtUtils.parseJWT(jwtProperties.getAdminSecretKey(),jwt);//通过解析jwt令牌获取claims对象
         Integer operateUser = (Integer) claims.get("userId");//通过claims对象获取jwt令牌中携带的登录员工信息
+        String operateName = (String) claims.get("employeeName");
 
         LocalDateTime operateTime = LocalDateTime.now();
         //获取操作时间
@@ -66,9 +67,8 @@ public class AdminLogAspect {
         long costTime = end - start;
 
         // TODO Mapper层的日志插入
-        OperateLog operateLog = new OperateLog(null,operateUser,operateTime,className,methodName,methodParams,returnValue,costTime);
+        OperateLog operateLog = new OperateLog(null,operateUser,operateName,operateTime,className,methodName,methodParams,returnValue,costTime);
         operateLogMapper.insert(operateLog);
-
         return result;
     }
 }

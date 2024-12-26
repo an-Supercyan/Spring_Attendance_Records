@@ -1,9 +1,12 @@
 package com.example.records.service.impl;
 
 
+import com.example.records.constant.MessageConstant;
 import com.example.records.context.BaseContext;
+import com.example.records.exception.PasswordErrorException;
 import com.example.records.mapper.UserMapper;
 import com.example.records.pojo.dto.UserDTO;
+import com.example.records.pojo.dto.UserLoginDTO;
 import com.example.records.pojo.dto.UserPageQueryDTO;
 import com.example.records.pojo.entity.User;
 import com.example.records.pojo.vo.UserVO;
@@ -13,6 +16,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,5 +92,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         userMapper.deleteUserById(id);
+    }
+
+    @Override
+    public void checkOldPassword(UserLoginDTO userLoginDTO) {
+        String password = DigestUtils.md5Hex(userLoginDTO.getPassword());
+        log.info("{}", password);
+        log.info("{}",BaseContext.getCurrentId());
+        if (!userMapper.getUserById(BaseContext.getCurrentId()).getPassword().equals(password)) {
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+    }
+
+
+    @Override
+    public void changePassword(UserLoginDTO userLoginDTO) {
+        String password = DigestUtils.md5Hex(userLoginDTO.getPassword());
+        User user = new User();
+        user.setId(BaseContext.getCurrentId());
+        user.setPassword(password);
+        userMapper.update(user);
     }
 }

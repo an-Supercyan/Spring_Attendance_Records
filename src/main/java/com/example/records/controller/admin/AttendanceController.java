@@ -3,12 +3,10 @@ package com.example.records.controller.admin;
 
 import com.example.records.pojo.dto.AttendanceDTO;
 import com.example.records.pojo.dto.AttendancePageQueryDTO;
-import com.example.records.pojo.vo.AttendanceVO;
 import com.example.records.result.PageResult;
 import com.example.records.result.Result;
 
 import com.example.records.service.AttendanceService;
-import com.example.records.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +21,7 @@ public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
 
+
     @ApiOperation("分页查询员工考勤信息")
     @GetMapping("/search")
     public Result<PageResult> pageAttendance(AttendancePageQueryDTO attendancePageQueryDTO) {
@@ -31,7 +30,21 @@ public class AttendanceController {
         return Result.success(pageResult);
     }
 
+    // TODO 编辑员工考勤信息
+    @ApiOperation("编辑员工考勤信息")
+    @PutMapping("/update")
+    public Result<String> updateAttendance(@RequestBody AttendanceDTO attendanceDTO) {
+        log.info("获取需要更新的员工考勤信息{}",attendanceDTO);
+        attendanceService.updateAttendance(attendanceDTO);
+        return Result.success();
+    }
 
-
-
+    // TODO 删除员工考勤信息
+    @ApiOperation("删除员工考勤信息")
+    @DeleteMapping("/delete/{id}")
+    public Result<String> deleteAttendance(@PathVariable Long id) {
+        log.info("删除员工考勤信息{}", id);
+        attendanceService.deleteAttendance(id);
+        return Result.success();
+    }
 }
